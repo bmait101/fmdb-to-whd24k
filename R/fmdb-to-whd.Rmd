@@ -1,0 +1,36 @@
+---
+title: "FMDB to WHD 24k"
+author: "Bryan M Maitland"
+date: "4/19/2022"
+output: html_document
+---
+
+The goal of this analysis is to link all WDNR fishery survey/monitoring sites to the 24k WHD. In other works, we need a crosswalk table between site.seq.no (SWIMS station ID) and hydroid/reach ids. This way data associated with the Hydro Geodatabase can be linked to fisheries data. 
+
+
+## Get surevy data
+
+```{r}
+
+yrs <- list(1994:1998, 1999:2003, 2004:2008, 2009:2013, 2014:2018, 2019:2021)
+
+waterbody_types <- c(
+  "wadable_stream", 
+  "non-wadable_stream", 
+  "streams"
+)
+
+
+# Fetch data -------------------------------------------------------------------
+
+# Survey data (42 seconds)
+system.time(
+  df_surveys_raw <- yrs %>%
+    purrr::map_df(~get_fmdb_surveys(
+      year = .,
+      waterbody_type = waterbody_types
+    ))
+)
+
+```
+
